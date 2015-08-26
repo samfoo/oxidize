@@ -12,6 +12,27 @@ pub trait Matcher<Lhs> {
     fn fail_msg(&self, rhs: &Lhs) -> String;
 }
 
+trait WithLen {
+    fn len(&self) -> usize;
+    fn is_empty(&self) -> bool;
+}
+
+impl<T> WithLen for Vec<T> {
+    fn len(&self) -> usize { self.len() }
+    fn is_empty(&self) -> bool { self.is_empty() }
+}
+
+pub struct Empty;
+impl<Lhs: Debug + WithLen> Matcher<Lhs> for Empty {
+    fn matches(&self, rhs: &Lhs) -> bool {
+        rhs.is_empty()
+    }
+
+    fn fail_msg(&self, rhs: &Lhs) -> String {
+        format!("expected {:?} to be empty", rhs)
+    }
+}
+
 pub struct Equal<Lhs: Debug>(Lhs);
 
 impl<Lhs: Debug + PartialEq> Matcher<Lhs> for Equal<Lhs> {
@@ -37,6 +58,10 @@ impl<Lhs: Debug, M: Matcher<Lhs>> Matcher<Lhs> for Not<Lhs, M> {
 }
 
 impl<Lhs: Debug> Expectation<Lhs> {
+    pub fn is<T>(&self, matcher: T) where T: Matcher<Lhs> {
+        self.to(matcher)
+    }
+
     pub fn to<T>(&self, matcher: T) where T: Matcher<Lhs> {
         if !matcher.matches(&self.0) {
             panic!(matcher.fail_msg(&self.0))
@@ -56,9 +81,13 @@ pub fn not<T: Debug, M: Matcher<T>>(rhs: M) -> Not<T, M> {
     Not(rhs, PhantomData)
 }
 
+pub fn empty() -> Empty {
+    Empty
+}
+
 #[cfg(test)]
 mod test {
-    use super::{expect, equal, not};
+    use super::{expect, equal, not, empty};
 
     #[test]
     fn test_expect_equality() {
@@ -94,5 +123,17 @@ mod test {
     #[should_panic(expected="not expected 1 to equal 1")]
     fn test_invert_equality_equal_to_fail() {
         expect(1).to(not(equal(1)));
+    }
+
+    #[test]
+    fn test_empty() {
+        let v: Vec<usize> = Vec::new();
+        expect(v).is(empty());
+    }
+
+    #[test]
+    fn test_not_empty() {
+        let v = vec![1, 2, 3];
+        expect(v).is(not(empty()));
     }
 }
