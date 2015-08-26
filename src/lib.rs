@@ -37,7 +37,7 @@ impl<Lhs: Debug, M: Matcher<Lhs>> Matcher<Lhs> for Not<Lhs, M> {
 }
 
 impl<Lhs: Debug> Expectation<Lhs> {
-    fn to<T>(&self, matcher: T) where T: Matcher<Lhs> {
+    pub fn to<T>(&self, matcher: T) where T: Matcher<Lhs> {
         if !matcher.matches(&self.0) {
             panic!(matcher.fail_msg(&self.0))
         }
