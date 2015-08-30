@@ -72,6 +72,18 @@ impl<Lhs: Debug + WithLen> Matcher<Lhs> for Empty {
     }
 }
 
+pub struct LessThan<Lhs: Debug>(Lhs);
+
+impl<Lhs: Debug + PartialOrd> Matcher<Lhs> for LessThan<Lhs> {
+    fn matches(&self, lhs: &Lhs) -> bool {
+        *lhs < self.0
+    }
+
+    fn fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected {:?} to be less than {:?}", self.0, lhs)
+    }
+}
+
 pub struct GreaterThan<Lhs: Debug>(Lhs);
 
 impl<Lhs: Debug + PartialOrd> Matcher<Lhs> for GreaterThan<Lhs> {
@@ -80,7 +92,7 @@ impl<Lhs: Debug + PartialOrd> Matcher<Lhs> for GreaterThan<Lhs> {
     }
 
     fn fail_msg(&self, lhs: &Lhs) -> String {
-        format!("expected {:?} to equal {:?}", self.0, lhs)
+        format!("expected {:?} to be greater than {:?}", self.0, lhs)
     }
 }
 
@@ -144,9 +156,13 @@ pub fn greater_than<T: Debug>(rhs: T) -> GreaterThan<T> {
     GreaterThan(rhs)
 }
 
+pub fn less_than<T: Debug>(rhs: T) -> LessThan<T> {
+    LessThan(rhs)
+}
+
 #[cfg(test)]
 mod test {
-    use super::{expect, equal, not, empty, contain, greater_than};
+    use super::{expect, equal, not, empty, contain, greater_than, less_than};
 
     #[test]
     fn test_expect_equality() {
@@ -255,5 +271,15 @@ mod test {
     #[test]
     fn test_not_greater_than_int() {
         expect(5).is(not(greater_than(10)));
+    }
+
+    #[test]
+    fn test_less_than_int() {
+        expect(5).is(less_than(10));
+    }
+
+    #[test]
+    fn test_not_less_than_int() {
+        expect(5).is(not(less_than(1)));
     }
 }
