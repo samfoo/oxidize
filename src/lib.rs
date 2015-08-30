@@ -108,6 +108,19 @@ impl<Lhs: Debug + PartialEq> Matcher<Lhs> for Equal<Lhs> {
     }
 }
 
+pub struct AllOf<A: Debug>(Vec<Box<Matcher<A>>>);
+
+impl<Lhs: Debug> Matcher<Lhs> for AllOf<Lhs> {
+    fn matches(&self, lhs: &Lhs) -> bool {
+        self.0.iter().all(|bm| bm.matches(lhs))
+    }
+
+    fn fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected all of {:?}",
+                self.0.iter().map(|m| m.fail_msg(lhs)).collect::<Vec<String>>())
+    }
+}
+
 pub struct AnyOf<A: Debug>(Vec<Box<Matcher<A>>>);
 
 impl<Lhs: Debug> Matcher<Lhs> for AnyOf<Lhs> {
@@ -173,8 +186,12 @@ pub fn less_than<T: Debug>(rhs: T) -> Box<LessThan<T>> {
     box LessThan(rhs)
 }
 
-pub fn any_of<T: Debug + Clone>(rhs: Vec<Box<Matcher<T>>>) -> Box<AnyOf<T>> {
+pub fn any_of<T: Debug>(rhs: Vec<Box<Matcher<T>>>) -> Box<AnyOf<T>> {
     box AnyOf(rhs)
+}
+
+pub fn all_of<T: Debug>(rhs: Vec<Box<Matcher<T>>>) -> Box<AllOf<T>> {
+    box AllOf(rhs)
 }
 
 #[cfg(test)]
@@ -310,5 +327,17 @@ mod test {
     fn test_any_of_none() {
         expect(5).is(not(any_of(vec![less_than(0),
                                      greater_than(100)])))
+    }
+
+    #[test]
+    fn test_all_of() {
+        expect(5).is(all_of(vec![less_than(1000),
+                                 greater_than(1)]))
+    }
+
+    #[test]
+    fn test_not_all_of() {
+        expect(5).is(not(all_of(vec![less_than(1000),
+                                     greater_than(10)])))
     }
 }
