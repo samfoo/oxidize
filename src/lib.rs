@@ -1,6 +1,7 @@
 #![feature(core)]
 extern crate core;
 use core::fmt::Debug;
+use std::slice::Iter;
 use std::marker::PhantomData;
 
 pub struct Expectation<Lhs: Debug>(Lhs);
@@ -13,29 +14,50 @@ pub trait Matcher<Lhs> {
 }
 
 pub trait WithLen {
-    fn len(&self) -> usize;
-    fn is_empty(&self) -> bool;
+    fn match_len(&self) -> usize;
+    fn match_is_empty(&self) -> bool;
 }
 
 impl<T> WithLen for Vec<T> {
-    fn len(&self) -> usize { self.len() }
-    fn is_empty(&self) -> bool { self.is_empty() }
+    fn match_len(&self) -> usize { self.len() }
+    fn match_is_empty(&self) -> bool { self.is_empty() }
 }
 
 impl WithLen for String {
-    fn len(&self) -> usize { self.chars().count() }
-    fn is_empty(&self) -> bool { self.chars().count() == 0 }
+    fn match_len(&self) -> usize { self.chars().count() }
+    fn match_is_empty(&self) -> bool { self.chars().count() == 0 }
 }
 
 impl<'a> WithLen for &'a str {
-    fn len(&self) -> usize { self.chars().count() }
-    fn is_empty(&self) -> bool { self.chars().count() == 0 }
+    fn match_len(&self) -> usize { self.chars().count() }
+    fn match_is_empty(&self) -> bool { self.chars().count() == 0 }
+}
+
+pub trait WithIter<T> {
+    fn match_iter(&self) -> Iter<T>;
+}
+
+impl<T> WithIter<T> for Vec<T> {
+    fn match_iter(&self) -> Iter<T> { self.iter() }
+}
+
+pub struct Contains<T>(T);
+
+impl<T: Debug + PartialEq, Lhs: Debug + WithIter<T>> Matcher<Lhs> for Contains<T> {
+    fn matches(&self, lhs: &Lhs) -> bool {
+        lhs.match_iter().any(|i| *i == self.0)
+    }
+
+    fn fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected {:?} to contain {:?}", lhs, self.0)
+    }
 }
 
 pub struct Empty;
+
 impl<Lhs: Debug + WithLen> Matcher<Lhs> for Empty {
     fn matches(&self, rhs: &Lhs) -> bool {
-        rhs.is_empty()
+        rhs.match_is_empty()
     }
 
     fn fail_msg(&self, rhs: &Lhs) -> String {
@@ -95,9 +117,13 @@ pub fn empty() -> Empty {
     Empty
 }
 
+pub fn contain<T: Debug>(rhs: T) -> Contains<T> {
+    Contains(rhs)
+}
+
 #[cfg(test)]
 mod test {
-    use super::{expect, equal, not, empty};
+    use super::{expect, equal, not, empty, contain};
 
     #[test]
     fn test_expect_equality() {
@@ -166,5 +192,15 @@ mod test {
     #[test]
     fn test_not_empty_str() {
         expect("not-empty").is(not(empty()));
+    }
+
+    #[test]
+    fn test_contains() {
+        expect(vec![1, 2, 3]).to(contain(1));
+    }
+
+    #[test]
+    fn test_not_contains() {
+        expect(vec![1, 2, 3]).to(not(contain(10)));
     }
 }
