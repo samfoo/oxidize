@@ -12,7 +12,7 @@ pub trait Matcher<Lhs> {
     fn fail_msg(&self, rhs: &Lhs) -> String;
 }
 
-trait WithLen {
+pub trait WithLen {
     fn len(&self) -> usize;
     fn is_empty(&self) -> bool;
 }
@@ -20,6 +20,16 @@ trait WithLen {
 impl<T> WithLen for Vec<T> {
     fn len(&self) -> usize { self.len() }
     fn is_empty(&self) -> bool { self.is_empty() }
+}
+
+impl WithLen for String {
+    fn len(&self) -> usize { self.chars().count() }
+    fn is_empty(&self) -> bool { self.chars().count() == 0 }
+}
+
+impl<'a> WithLen for &'a str {
+    fn len(&self) -> usize { self.chars().count() }
+    fn is_empty(&self) -> bool { self.chars().count() == 0 }
 }
 
 pub struct Empty;
@@ -135,5 +145,26 @@ mod test {
     fn test_not_empty() {
         let v = vec![1, 2, 3];
         expect(v).is(not(empty()));
+    }
+
+
+    #[test]
+    fn test_empty_string() {
+        expect("".to_string()).is(empty());
+    }
+
+    #[test]
+    fn test_not_empty_string() {
+        expect("not-empty".to_string()).is(not(empty()));
+    }
+
+    #[test]
+    fn test_empty_str() {
+        expect("").is(empty());
+    }
+
+    #[test]
+    fn test_not_empty_str() {
+        expect("not-empty").is(not(empty()));
     }
 }
