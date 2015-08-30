@@ -1,7 +1,6 @@
 #![feature(core)]
 extern crate core;
 use core::fmt::Debug;
-use std::slice::Iter;
 use std::marker::PhantomData;
 
 pub struct Expectation<Lhs: Debug>(Lhs);
@@ -29,22 +28,24 @@ impl<'a> WithLen for &'a str {
     fn match_len(&self) -> usize { self.chars().count() }
 }
 
-pub trait WithIter<T> {
-    fn match_iter(&self) -> Iter<T>;
-}
-
-impl<T> WithIter<T> for Vec<T> {
-    fn match_iter(&self) -> Iter<T> { self.iter() }
-}
-
 pub struct Contains<T>(T);
 
-impl<T: Debug + PartialEq, Lhs: Debug + WithIter<T>> Matcher<Lhs> for Contains<T> {
-    fn matches(&self, lhs: &Lhs) -> bool {
-        lhs.match_iter().any(|i| *i == self.0)
+impl<T: Debug + PartialEq> Matcher<Vec<T>> for Contains<T> {
+    fn matches(&self, lhs: &Vec<T>) -> bool {
+        lhs.iter().any(|i| *i == self.0)
     }
 
-    fn fail_msg(&self, lhs: &Lhs) -> String {
+    fn fail_msg(&self, lhs: &Vec<T>) -> String {
+        format!("expected {:?} to contain {:?}", lhs, self.0)
+    }
+}
+
+impl Matcher<String> for Contains<char> {
+    fn matches(&self, lhs: &String) -> bool {
+        lhs.chars().any(|i| i == self.0)
+    }
+
+    fn fail_msg(&self, lhs: &String) -> String {
         format!("expected {:?} to contain {:?}", lhs, self.0)
     }
 }
@@ -198,5 +199,15 @@ mod test {
     #[test]
     fn test_not_contains() {
         expect(vec![1, 2, 3]).to(not(contain(10)));
+    }
+
+    #[test]
+    fn test_contains_string_char() {
+        expect("Hello, world!".to_string()).to(contain('H'));
+    }
+
+    #[test]
+    fn test_not_contains_string_char() {
+        expect("Hello, world!".to_string()).to(not(contain('Z')));
     }
 }
