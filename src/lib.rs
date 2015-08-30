@@ -46,7 +46,7 @@ impl Matcher<String> for Contains<char> {
     }
 
     fn fail_msg(&self, lhs: &String) -> String {
-        format!("expected \"{:?}\" to contain '{:?}'", lhs, self.0)
+        format!("expected {:?} to contain {:?}", lhs, self.0)
     }
 }
 
@@ -56,7 +56,7 @@ impl Matcher<String> for Contains<String> {
     }
 
     fn fail_msg(&self, lhs: &String) -> String {
-        format!("expected \"{:?}\" to contain \"{:?}\"", lhs, self.0)
+        format!("expected {:?} to contain {:?}", lhs, self.0)
     }
 }
 
@@ -80,7 +80,7 @@ impl<Lhs: Debug + PartialOrd> Matcher<Lhs> for LessThan<Lhs> {
     }
 
     fn fail_msg(&self, lhs: &Lhs) -> String {
-        format!("expected {:?} to be less than {:?}", self.0, lhs)
+        format!("expected {:?} to be less than {:?}", lhs, self.0)
     }
 }
 
@@ -92,7 +92,7 @@ impl<Lhs: Debug + PartialOrd> Matcher<Lhs> for GreaterThan<Lhs> {
     }
 
     fn fail_msg(&self, lhs: &Lhs) -> String {
-        format!("expected {:?} to be greater than {:?}", self.0, lhs)
+        format!("expected {:?} to be greater than {:?}", lhs, self.0)
     }
 }
 
@@ -246,6 +246,11 @@ mod test {
         expect(v).is(not(empty()));
     }
 
+    #[test]
+    #[should_panic(expected="expected [1, 2, 3] to be empty")]
+    fn test_not_empty_vec_fails() {
+        expect(vec![1, 2, 3]).is(empty());
+    }
 
     #[test]
     fn test_empty_string() {
@@ -260,6 +265,12 @@ mod test {
     #[test]
     fn test_empty_str() {
         expect("").is(empty());
+    }
+
+    #[test]
+    #[should_panic(expected="expected \"hey diddle diddle\" to be empty")]
+    fn test_not_empty_str_fails() {
+        expect("hey diddle diddle").is(empty())
     }
 
     #[test]
@@ -278,6 +289,12 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected [1, 2, 3] to contain 5")]
+    fn test_not_contains_fails() {
+        expect(vec![1, 2, 3]).to(contain(5));
+    }
+
+    #[test]
     fn test_contains_string_char() {
         expect("Hello, world!".to_string()).to(contain('H'));
     }
@@ -285,6 +302,12 @@ mod test {
     #[test]
     fn test_not_contains_string_char() {
         expect("Hello, world!".to_string()).to(not(contain('Z')));
+    }
+
+    #[test]
+    #[should_panic(expected="expected \"fe fi fo fum\" to contain 'z'")]
+    fn test_not_contains_char_fails() {
+        expect("fe fi fo fum".to_string()).to(contain('z'));
     }
 
     #[test]
@@ -298,6 +321,12 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected \"fe fi fo fum\" to contain \"substring\"")]
+    fn test_not_contains_substring_fails() {
+        expect("fe fi fo fum".to_string()).to(contain("substring".to_string()));
+    }
+
+    #[test]
     fn test_greater_than_int() {
         expect(5).is(greater_than(1));
     }
@@ -308,6 +337,12 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected 5 to be greater than 6")]
+    fn test_not_greater_than_fails() {
+        expect(5).is(greater_than(6));
+    }
+
+    #[test]
     fn test_less_than_int() {
         expect(5).is(less_than(10));
     }
@@ -315,6 +350,12 @@ mod test {
     #[test]
     fn test_not_less_than_int() {
         expect(5).is(not(less_than(1)));
+    }
+
+    #[test]
+    #[should_panic(expected="expected 10 to be less than 6")]
+    fn test_not_less_than_fails() {
+        expect(10).is(less_than(6));
     }
 
     #[test]
