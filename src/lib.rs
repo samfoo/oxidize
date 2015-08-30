@@ -1,7 +1,7 @@
+#![feature(box_syntax)]
 #![feature(core)]
 extern crate core;
 use core::fmt::Debug;
-use std::marker::PhantomData;
 
 pub struct Expectation<Lhs: Debug>(Lhs);
 
@@ -108,9 +108,22 @@ impl<Lhs: Debug + PartialEq> Matcher<Lhs> for Equal<Lhs> {
     }
 }
 
-pub struct Not<A, M>(M, PhantomData<A>) where A: Debug, M: Matcher<A>;
+pub struct AnyOf<A: Debug>(Vec<Box<Matcher<A>>>);
 
-impl<Lhs: Debug, M: Matcher<Lhs>> Matcher<Lhs> for Not<Lhs, M> {
+impl<Lhs: Debug> Matcher<Lhs> for AnyOf<Lhs> {
+    fn matches(&self, lhs: &Lhs) -> bool {
+        self.0.iter().any(|bm| bm.matches(lhs))
+    }
+
+    fn fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected one of {:?}",
+                self.0.iter().map(|m| m.fail_msg(lhs)).collect::<Vec<String>>())
+    }
+}
+
+pub struct Not<A>(Box<Matcher<A>>);
+
+impl<Lhs: Debug> Matcher<Lhs> for Not<Lhs> {
     fn matches(&self, rhs: &Lhs) -> bool {
         !self.0.matches(rhs)
     }
@@ -121,11 +134,11 @@ impl<Lhs: Debug, M: Matcher<Lhs>> Matcher<Lhs> for Not<Lhs, M> {
 }
 
 impl<Lhs: Debug> Expectation<Lhs> {
-    pub fn is<T>(&self, matcher: T) where T: Matcher<Lhs> {
+    pub fn is<T>(&self, matcher: Box<T>) where T: Matcher<Lhs> {
         self.to(matcher)
     }
 
-    pub fn to<T>(&self, matcher: T) where T: Matcher<Lhs> {
+    pub fn to<T>(&self, matcher: Box<T>) where T: Matcher<Lhs> {
         if !matcher.matches(&self.0) {
             panic!(matcher.fail_msg(&self.0))
         }
@@ -136,33 +149,37 @@ pub fn expect<T: Debug>(lhs: T) -> Expectation<T> {
     Expectation(lhs)
 }
 
-pub fn equal<T: Debug>(rhs: T) -> Equal<T> {
-    Equal(rhs)
+pub fn equal<T: Debug>(rhs: T) -> Box<Equal<T>> {
+    box Equal(rhs)
 }
 
-pub fn not<T: Debug, M: Matcher<T>>(rhs: M) -> Not<T, M> {
-    Not(rhs, PhantomData)
+pub fn not<T: Debug>(rhs: Box<Matcher<T>>) -> Box<Not<T>> {
+    box Not(rhs)
 }
 
-pub fn empty() -> Empty {
-    Empty
+pub fn empty() -> Box<Empty> {
+    box Empty
 }
 
-pub fn contain<T: Debug>(rhs: T) -> Contains<T> {
-    Contains(rhs)
+pub fn contain<T: Debug>(rhs: T) -> Box<Contains<T>> {
+    box Contains(rhs)
 }
 
-pub fn greater_than<T: Debug>(rhs: T) -> GreaterThan<T> {
-    GreaterThan(rhs)
+pub fn greater_than<T: Debug>(rhs: T) -> Box<GreaterThan<T>> {
+    box GreaterThan(rhs)
 }
 
-pub fn less_than<T: Debug>(rhs: T) -> LessThan<T> {
-    LessThan(rhs)
+pub fn less_than<T: Debug>(rhs: T) -> Box<LessThan<T>> {
+    box LessThan(rhs)
+}
+
+pub fn any_of<T: Debug + Clone>(rhs: Vec<Box<Matcher<T>>>) -> Box<AnyOf<T>> {
+    box AnyOf(rhs)
 }
 
 #[cfg(test)]
 mod test {
-    use super::{expect, equal, not, empty, contain, greater_than, less_than};
+    use super::*;
 
     #[test]
     fn test_expect_equality() {
@@ -281,5 +298,17 @@ mod test {
     #[test]
     fn test_not_less_than_int() {
         expect(5).is(not(less_than(1)));
+    }
+
+    #[test]
+    fn test_any_of() {
+        expect(5).is(any_of(vec![less_than(0),
+                                 greater_than(1)]))
+    }
+
+    #[test]
+    fn test_any_of_none() {
+        expect(5).is(not(any_of(vec![less_than(0),
+                                     greater_than(100)])))
     }
 }
