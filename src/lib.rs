@@ -46,7 +46,17 @@ impl Matcher<String> for Contains<char> {
     }
 
     fn fail_msg(&self, lhs: &String) -> String {
-        format!("expected {:?} to contain {:?}", lhs, self.0)
+        format!("expected \"{:?}\" to contain '{:?}'", lhs, self.0)
+    }
+}
+
+impl Matcher<String> for Contains<String> {
+    fn matches(&self, lhs: &String) -> bool {
+        lhs.contains(&*self.0)
+    }
+
+    fn fail_msg(&self, lhs: &String) -> String {
+        format!("expected \"{:?}\" to contain \"{:?}\"", lhs, self.0)
     }
 }
 
@@ -209,5 +219,15 @@ mod test {
     #[test]
     fn test_not_contains_string_char() {
         expect("Hello, world!".to_string()).to(not(contain('Z')));
+    }
+
+    #[test]
+    fn test_contains_string_substring() {
+        expect("Hello, world!".to_string()).to(contain("Hello".to_string()));
+    }
+
+    #[test]
+    fn test_not_contains_string_substring() {
+        expect("Hello, world!".to_string()).to(not(contain("not-in-there".to_string())));
     }
 }
