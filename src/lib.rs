@@ -15,22 +15,18 @@ pub trait Matcher<Lhs> {
 
 pub trait WithLen {
     fn match_len(&self) -> usize;
-    fn match_is_empty(&self) -> bool;
 }
 
 impl<T> WithLen for Vec<T> {
     fn match_len(&self) -> usize { self.len() }
-    fn match_is_empty(&self) -> bool { self.is_empty() }
 }
 
 impl WithLen for String {
     fn match_len(&self) -> usize { self.chars().count() }
-    fn match_is_empty(&self) -> bool { self.chars().count() == 0 }
 }
 
 impl<'a> WithLen for &'a str {
     fn match_len(&self) -> usize { self.chars().count() }
-    fn match_is_empty(&self) -> bool { self.chars().count() == 0 }
 }
 
 pub trait WithIter<T> {
@@ -57,7 +53,7 @@ pub struct Empty;
 
 impl<Lhs: Debug + WithLen> Matcher<Lhs> for Empty {
     fn matches(&self, rhs: &Lhs) -> bool {
-        rhs.match_is_empty()
+        rhs.match_len() == 0
     }
 
     fn fail_msg(&self, rhs: &Lhs) -> String {
