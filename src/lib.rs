@@ -72,6 +72,18 @@ impl<Lhs: Debug + WithLen> Matcher<Lhs> for Empty {
     }
 }
 
+pub struct GreaterThan<Lhs: Debug>(Lhs);
+
+impl<Lhs: Debug + PartialOrd> Matcher<Lhs> for GreaterThan<Lhs> {
+    fn matches(&self, lhs: &Lhs) -> bool {
+        *lhs > self.0
+    }
+
+    fn fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected {:?} to equal {:?}", self.0, lhs)
+    }
+}
+
 pub struct Equal<Lhs: Debug>(Lhs);
 
 impl<Lhs: Debug + PartialEq> Matcher<Lhs> for Equal<Lhs> {
@@ -128,9 +140,13 @@ pub fn contain<T: Debug>(rhs: T) -> Contains<T> {
     Contains(rhs)
 }
 
+pub fn greater_than<T: Debug>(rhs: T) -> GreaterThan<T> {
+    GreaterThan(rhs)
+}
+
 #[cfg(test)]
 mod test {
-    use super::{expect, equal, not, empty, contain};
+    use super::{expect, equal, not, empty, contain, greater_than};
 
     #[test]
     fn test_expect_equality() {
@@ -229,5 +245,15 @@ mod test {
     #[test]
     fn test_not_contains_string_substring() {
         expect("Hello, world!".to_string()).to(not(contain("not-in-there".to_string())));
+    }
+
+    #[test]
+    fn test_greater_than_int() {
+        expect(5).is(greater_than(1));
+    }
+
+    #[test]
+    fn test_not_greater_than_int() {
+        expect(5).is(not(greater_than(10)));
     }
 }
