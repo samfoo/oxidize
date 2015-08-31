@@ -12,19 +12,19 @@ pub trait Matcher<Lhs> {
     fn fail_msg(&self, rhs: &Lhs) -> String;
 }
 
-pub trait WithLen {
+pub trait Collection {
     fn match_len(&self) -> usize;
 }
 
-impl<T> WithLen for Vec<T> {
+impl<T> Collection for Vec<T> {
     fn match_len(&self) -> usize { self.len() }
 }
 
-impl WithLen for String {
+impl Collection for String {
     fn match_len(&self) -> usize { self.chars().count() }
 }
 
-impl<'a> WithLen for &'a str {
+impl<'a> Collection for &'a str {
     fn match_len(&self) -> usize { self.chars().count() }
 }
 
@@ -62,7 +62,7 @@ impl Matcher<String> for Contains<String> {
 
 pub struct Empty;
 
-impl<Lhs: Debug + WithLen> Matcher<Lhs> for Empty {
+impl<Lhs: Debug + Collection> Matcher<Lhs> for Empty {
     fn matches(&self, rhs: &Lhs) -> bool {
         rhs.match_len() == 0
     }
