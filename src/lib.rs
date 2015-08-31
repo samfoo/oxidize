@@ -5,8 +5,6 @@ use core::fmt::Debug;
 
 pub struct Expectation<Lhs: Debug>(Lhs);
 
-pub struct To<Lhs: Debug>(Lhs);
-
 pub trait Matcher<Lhs> {
     fn matches(&self, rhs: &Lhs) -> bool;
     fn fail_msg(&self, rhs: &Lhs) -> String;
