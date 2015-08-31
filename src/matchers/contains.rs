@@ -84,6 +84,5 @@ mod test {
     fn test_not_contains_substring_fails() {
         expect("fe fi fo fum".to_string()).to(contain("substring".to_string()));
     }
-
 }
 
