@@ -1,4 +1,6 @@
 [package]
 name = "oxidize"
+description = "Awesome matchers/asserts"
 version = "0.1.0"
+license = "MPL-2.0"
 authors = ["Sam Gibson <sam@ifdown.net>"]
