@@ -1,8 +1,8 @@
 # What is oxidize?
 
-Oxidizer is a library that makes making assertions in tests easier to read.
-Oxidize is still under development and should be considered experimental for
-the time being.
+Oxidize is a library that makes assertions in tests easier to read.
+
+*(Oxidize is still under development and should be considered experimental)*
 
 ## Huh?
 
