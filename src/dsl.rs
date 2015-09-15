@@ -8,34 +8,34 @@ pub fn expect<T: Debug>(lhs: T) -> Expectation<T> {
 }
 
 pub fn equal<T: Debug>(rhs: T) -> Box<Equal<T>> {
-    box Equal(rhs)
+    Box::new(Equal(rhs))
 }
 
 pub fn not<T: Debug>(rhs: Box<Matcher<T>>) -> Box<Not<T>> {
-    box Not(rhs)
+    Box::new(Not(rhs))
 }
 
 pub fn empty() -> Box<Empty> {
-    box Empty
+    Box::new(Empty)
 }
 
 pub fn contain<T: Debug>(rhs: T) -> Box<Contains<T>> {
-    box Contains(rhs)
+    Box::new(Contains(rhs))
 }
 
 pub fn greater_than<T: Debug>(rhs: T) -> Box<GreaterThan<T>> {
-    box GreaterThan(rhs)
+    Box::new(GreaterThan(rhs))
 }
 
 pub fn less_than<T: Debug>(rhs: T) -> Box<LessThan<T>> {
-    box LessThan(rhs)
+    Box::new(LessThan(rhs))
 }
 
 pub fn any_of<T: Debug>(rhs: Vec<Box<Matcher<T>>>) -> Box<AnyOf<T>> {
-    box AnyOf(rhs)
+    Box::new(AnyOf(rhs))
 }
 
 pub fn all_of<T: Debug>(rhs: Vec<Box<Matcher<T>>>) -> Box<AllOf<T>> {
-    box AllOf(rhs)
+    Box::new(AllOf(rhs))
 }
 
