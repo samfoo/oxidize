@@ -1,3 +1,5 @@
+![travis ci](https://travis-ci.org/samfoo/oxidize.svg)
+
 # What is oxidize?
 
 Oxidize is a library that makes assertions in tests easier to read.
