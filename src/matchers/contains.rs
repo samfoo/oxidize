@@ -1,4 +1,4 @@
-use core::fmt::Debug;
+use std::fmt::Debug;
 use super::Matcher;
 
 pub struct Contains<T>(pub T);

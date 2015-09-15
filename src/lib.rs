@@ -1,13 +1,10 @@
-#![feature(core)]
-
 use matchers::Matcher;
 use dsl::*;
 
 mod matchers;
 mod dsl;
 
-extern crate core;
-use core::fmt::Debug;
+use std::fmt::Debug;
 
 pub struct Expectation<Lhs: Debug>(Lhs);
 

@@ -1,4 +1,4 @@
-use core::fmt::Debug;
+use std::fmt::Debug;
 use super::Matcher;
 
 pub struct Not<A>(pub Box<Matcher<A>>);
