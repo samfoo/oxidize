@@ -13,7 +13,7 @@ How about an example, then?
 ```rust
 #[test]
 fn test_optimus_should_be_prime() {
-    expect("optimus".to_string()).to(contain("prime".to_string()));
+    expect("optimus").to(contain("prime"));
 }
 
 // panicked at 'expected "optimus" to contain "prime"'

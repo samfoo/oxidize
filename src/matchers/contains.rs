@@ -33,6 +33,39 @@ impl Matcher<String> for Contains<String> {
     }
 }
 
+impl<'a> Matcher<String> for Contains<&'a str> {
+    fn matches(&self, lhs: &String) -> bool {
+        lhs.contains(self.0)
+    }
+
+    fn fail_msg(&self, lhs: &String) -> String {
+        format!("expected {:?} to contain {:?}", lhs, self.0)
+    }
+}
+
+impl<'a> Matcher<&'a str> for Contains<String> {
+    fn matches(&self, lhs: &&'a str) -> bool {
+        (*lhs).contains(&*self.0)
+    }
+
+    fn fail_msg(&self, lhs: &&'a str) -> String {
+        format!("expected {:?} to contain {:?}", lhs, self.0)
+    }
+}
+
+impl<'a, 'b> Matcher<&'a str> for Contains<&'b str> {
+    fn matches(&self, lhs: &&'a str) -> bool {
+        let lhs = *lhs;
+        let rhs = self.0;
+
+        lhs.contains(rhs)
+    }
+
+    fn fail_msg(&self, lhs: &&'a str) -> String {
+        format!("expected {:?} to contain {:?}", lhs, self.0)
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::super::super::dsl::*;
@@ -67,6 +100,36 @@ mod test {
     #[should_panic(expected="expected \"fe fi fo fum\" to contain 'z'")]
     fn test_not_contains_char_fails() {
         expect("fe fi fo fum".to_string()).to(contain('z'));
+    }
+
+    #[test]
+    fn test_contains_str_substring() {
+        expect("Hello, world!").to(contain("Hello"));
+    }
+
+    #[test]
+    fn test_not_contains_str_substring() {
+        expect("Hello, world!").to(not(contain("not-in-there")));
+    }
+
+    #[test]
+    fn test_contains_string_str_substring() {
+        expect("Hello, world!".to_string()).to(contain("Hello"));
+    }
+
+    #[test]
+    fn test_not_contains_string_str_substring() {
+        expect("Hello, world!".to_string()).to(not(contain("not-in-there")));
+    }
+
+    #[test]
+    fn test_contains_str_string_substring() {
+        expect("Hello, world!").to(contain("Hello".to_string()));
+    }
+
+    #[test]
+    fn test_not_contains_str_string_substring() {
+        expect("Hello, world!").to(not(contain("not-in-there".to_string())));
     }
 
     #[test]
