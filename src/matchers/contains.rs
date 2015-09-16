@@ -76,11 +76,6 @@ mod test {
     }
 
     #[test]
-    fn test_not_contains() {
-        expect(vec![1, 2, 3]).to(not(contain(10)));
-    }
-
-    #[test]
     #[should_panic(expected="expected [1, 2, 3] to contain 5")]
     fn test_not_contains_fails() {
         expect(vec![1, 2, 3]).to(contain(5));
@@ -89,11 +84,6 @@ mod test {
     #[test]
     fn test_contains_string_char() {
         expect("Hello, world!".to_string()).to(contain('H'));
-    }
-
-    #[test]
-    fn test_not_contains_string_char() {
-        expect("Hello, world!".to_string()).to(not(contain('Z')));
     }
 
     #[test]
@@ -108,8 +98,9 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
     fn test_not_contains_str_substring() {
-        expect("Hello, world!").to(not(contain("not-in-there")));
+        expect("Hello, world!").to(contain("not-in-there"));
     }
 
     #[test]
@@ -118,8 +109,9 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
     fn test_not_contains_string_str_substring() {
-        expect("Hello, world!".to_string()).to(not(contain("not-in-there")));
+        expect("Hello, world!".to_string()).to(contain("not-in-there"));
     }
 
     #[test]
@@ -128,8 +120,9 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
     fn test_not_contains_str_string_substring() {
-        expect("Hello, world!").to(not(contain("not-in-there".to_string())));
+        expect("Hello, world!").to(contain("not-in-there".to_string()));
     }
 
     #[test]

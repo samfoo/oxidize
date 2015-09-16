@@ -41,12 +41,6 @@ mod test {
     }
 
     #[test]
-    fn test_not_empty() {
-        let v = vec![1, 2, 3];
-        expect(v).is(not(empty()));
-    }
-
-    #[test]
     #[should_panic(expected="expected [1, 2, 3] to be empty")]
     fn test_not_empty_vec_fails() {
         expect(vec![1, 2, 3]).is(empty());
@@ -58,8 +52,9 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected \"not-empty\" to be empty")]
     fn test_not_empty_string() {
-        expect("not-empty".to_string()).is(not(empty()));
+        expect("not-empty".to_string()).is(empty());
     }
 
     #[test]
@@ -71,10 +66,5 @@ mod test {
     #[should_panic(expected="expected \"hey diddle diddle\" to be empty")]
     fn test_not_empty_str_fails() {
         expect("hey diddle diddle").is(empty())
-    }
-
-    #[test]
-    fn test_not_empty_str() {
-        expect("not-empty").is(not(empty()));
     }
 }

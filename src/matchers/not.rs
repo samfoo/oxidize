@@ -13,3 +13,24 @@ impl<Lhs: Debug> Matcher<Lhs> for Not<Lhs> {
     }
 }
 
+#[cfg(test)]
+mod test {
+    use super::super::super::dsl::*;
+
+    #[test]
+    fn test_invert_equality() {
+        expect(1).to(not(equal(2)));
+    }
+
+    #[test]
+    fn test_invert_invert_equality() {
+        expect(1).to(not(not(equal(1))));
+    }
+
+    #[test]
+    #[should_panic(expected="not expected 1 to equal 1")]
+    fn test_invert_equality_equal_to_fail() {
+        expect(1).to(not(equal(1)));
+    }
+
+}

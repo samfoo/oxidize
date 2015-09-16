@@ -39,3 +39,10 @@ pub fn all_of<T: Debug>(rhs: Vec<Box<Matcher<T>>>) -> Box<AllOf<T>> {
     Box::new(AllOf(rhs))
 }
 
+pub fn none() -> Box<Nothing> {
+    Box::new(Nothing)
+}
+
+pub fn some() -> Box<Something> {
+    Box::new(Something)
+}

@@ -38,9 +38,10 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected one of [\"expected 5 to be less than 0\", \"expected 5 to be greater than 100\"]")]
     fn test_any_of_none() {
-        expect(5).is(not(any_of(vec![less_than(0),
-                                     greater_than(100)])))
+        expect(5).is(any_of(vec![less_than(0),
+                                 greater_than(100)]))
     }
 
     #[test]
@@ -50,8 +51,9 @@ mod test {
     }
 
     #[test]
+    #[should_panic(expected="expected all of [\"expected 5 to be less than 1000\", \"expected 5 to be greater than 10\"]")]
     fn test_not_all_of() {
-        expect(5).is(not(all_of(vec![less_than(1000),
-                                     greater_than(10)])))
+        expect(5).is(all_of(vec![less_than(1000),
+                                 greater_than(10)]))
     }
 }

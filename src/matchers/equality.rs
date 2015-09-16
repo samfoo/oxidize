@@ -62,29 +62,8 @@ mod test {
     }
 
     #[test]
-    fn test_invert_equality() {
-        expect(1).to(not(equal(2)));
-    }
-
-    #[test]
-    fn test_invert_invert_equality() {
-        expect(1).to(not(not(equal(1))));
-    }
-
-    #[test]
-    #[should_panic(expected="not expected 1 to equal 1")]
-    fn test_invert_equality_equal_to_fail() {
-        expect(1).to(not(equal(1)));
-    }
-
-    #[test]
     fn test_greater_than_int() {
         expect(5).is(greater_than(1));
-    }
-
-    #[test]
-    fn test_not_greater_than_int() {
-        expect(5).is(not(greater_than(10)));
     }
 
     #[test]
@@ -99,14 +78,8 @@ mod test {
     }
 
     #[test]
-    fn test_not_less_than_int() {
-        expect(5).is(not(less_than(1)));
-    }
-
-    #[test]
     #[should_panic(expected="expected 10 to be less than 6")]
     fn test_not_less_than_fails() {
         expect(10).is(less_than(6));
     }
-
 }
