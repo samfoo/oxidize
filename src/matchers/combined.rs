@@ -12,6 +12,11 @@ impl<Lhs: Debug> Matcher<Lhs> for AllOf<Lhs> {
         format!("expected all of {:?}",
                 self.0.iter().map(|m| m.fail_msg(lhs)).collect::<Vec<String>>())
     }
+
+    fn negated_fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected not all of {:?}",
+                self.0.iter().map(|m| m.fail_msg(lhs)).collect::<Vec<String>>())
+    }
 }
 
 pub struct AnyOf<A: Debug>(pub Vec<Box<Matcher<A>>>);
@@ -23,6 +28,11 @@ impl<Lhs: Debug> Matcher<Lhs> for AnyOf<Lhs> {
 
     fn fail_msg(&self, lhs: &Lhs) -> String {
         format!("expected one of {:?}",
+                self.0.iter().map(|m| m.fail_msg(lhs)).collect::<Vec<String>>())
+    }
+
+    fn negated_fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected none of {:?}",
                 self.0.iter().map(|m| m.fail_msg(lhs)).collect::<Vec<String>>())
     }
 }

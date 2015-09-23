@@ -1,4 +1,5 @@
 use std::fmt::Debug;
+use std::intrinsics::type_name;
 use super::Matcher;
 
 pub struct Nothing;
@@ -12,6 +13,10 @@ impl<T: Debug> Matcher<Option<T>> for Nothing {
     fn fail_msg(&self, lhs: &Option<T>) -> String {
         format!("expected {:?} to be None", lhs)
     }
+
+    fn negated_fail_msg(&self, lhs: &Option<T>) -> String {
+        format!("expected {:?} to be Some<{}>", lhs, unsafe { type_name::<T>() })
+    }
 }
 
 impl<T: Debug> Matcher<Option<T>> for Something {
@@ -20,7 +25,11 @@ impl<T: Debug> Matcher<Option<T>> for Something {
     }
 
     fn fail_msg(&self, lhs: &Option<T>) -> String {
-        format!("expected {:?} to be Some<_>", lhs)
+        format!("expected {:?} to be Some<{}>", lhs, unsafe { type_name::<T>() })
+    }
+
+    fn negated_fail_msg(&self, lhs: &Option<T>) -> String {
+        format!("expected {:?} to be None", lhs)
     }
 }
 
@@ -48,7 +57,7 @@ mod test {
     }
 
     #[test]
-    #[should_panic(expected="expected None to be Some<_>")]
+    #[should_panic(expected="expected None to be Some<i32>")]
     fn test_not_some_to_fail() {
         let n: Option<i32> = None;
         expect(n).is(some());

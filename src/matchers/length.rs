@@ -28,6 +28,10 @@ impl<Lhs: Debug + Collection> Matcher<Lhs> for Empty {
     fn fail_msg(&self, rhs: &Lhs) -> String {
         format!("expected {:?} to be empty", rhs)
     }
+
+    fn negated_fail_msg(&self, rhs: &Lhs) -> String {
+        format!("expected {:?} not to be empty", rhs)
+    }
 }
 
 #[cfg(test)]

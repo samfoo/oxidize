@@ -11,10 +11,6 @@ pub fn equal<T: Debug>(rhs: T) -> Box<Equal<T>> {
     Box::new(Equal(rhs))
 }
 
-pub fn not<T: Debug>(rhs: Box<Matcher<T>>) -> Box<Not<T>> {
-    Box::new(Not(rhs))
-}
-
 pub fn empty() -> Box<Empty> {
     Box::new(Empty)
 }

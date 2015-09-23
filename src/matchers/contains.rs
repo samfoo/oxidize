@@ -11,6 +11,10 @@ impl<T: Debug + PartialEq> Matcher<Vec<T>> for Contains<T> {
     fn fail_msg(&self, lhs: &Vec<T>) -> String {
         format!("expected {:?} to contain {:?}", lhs, self.0)
     }
+
+    fn negated_fail_msg(&self, lhs: &Vec<T>) -> String {
+        format!("expected {:?} not to contain {:?}", lhs, self.0)
+    }
 }
 
 impl Matcher<String> for Contains<char> {
@@ -20,6 +24,10 @@ impl Matcher<String> for Contains<char> {
 
     fn fail_msg(&self, lhs: &String) -> String {
         format!("expected {:?} to contain {:?}", lhs, self.0)
+    }
+
+    fn negated_fail_msg(&self, lhs: &String) -> String {
+        format!("expected {:?} not to contain {:?}", lhs, self.0)
     }
 }
 
@@ -31,6 +39,10 @@ impl Matcher<String> for Contains<String> {
     fn fail_msg(&self, lhs: &String) -> String {
         format!("expected {:?} to contain {:?}", lhs, self.0)
     }
+
+    fn negated_fail_msg(&self, lhs: &String) -> String {
+        format!("expected {:?} not to contain {:?}", lhs, self.0)
+    }
 }
 
 impl<'a> Matcher<String> for Contains<&'a str> {
@@ -41,6 +53,10 @@ impl<'a> Matcher<String> for Contains<&'a str> {
     fn fail_msg(&self, lhs: &String) -> String {
         format!("expected {:?} to contain {:?}", lhs, self.0)
     }
+
+    fn negated_fail_msg(&self, lhs: &String) -> String {
+        format!("expected {:?} not to contain {:?}", lhs, self.0)
+    }
 }
 
 impl<'a> Matcher<&'a str> for Contains<String> {
@@ -50,6 +66,10 @@ impl<'a> Matcher<&'a str> for Contains<String> {
 
     fn fail_msg(&self, lhs: &&'a str) -> String {
         format!("expected {:?} to contain {:?}", lhs, self.0)
+    }
+
+    fn negated_fail_msg(&self, lhs: &&'a str) -> String {
+        format!("expected {:?} not to contain {:?}", lhs, self.0)
     }
 }
 
@@ -63,6 +83,10 @@ impl<'a, 'b> Matcher<&'a str> for Contains<&'b str> {
 
     fn fail_msg(&self, lhs: &&'a str) -> String {
         format!("expected {:?} to contain {:?}", lhs, self.0)
+    }
+
+    fn negated_fail_msg(&self, lhs: &&'a str) -> String {
+        format!("expected {:?} not to contain {:?}", lhs, self.0)
     }
 }
 
@@ -128,11 +152,6 @@ mod test {
     #[test]
     fn test_contains_string_substring() {
         expect("Hello, world!".to_string()).to(contain("Hello".to_string()));
-    }
-
-    #[test]
-    fn test_not_contains_string_substring() {
-        expect("Hello, world!".to_string()).to(not(contain("not-in-there".to_string())));
     }
 
     #[test]

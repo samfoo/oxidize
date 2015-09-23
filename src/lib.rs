@@ -1,3 +1,5 @@
+#![feature(core_intrinsics)]
+
 use matchers::Matcher;
 use dsl::*;
 

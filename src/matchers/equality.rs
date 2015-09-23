@@ -11,6 +11,10 @@ impl<Lhs: Debug + PartialOrd> Matcher<Lhs> for LessThan<Lhs> {
     fn fail_msg(&self, lhs: &Lhs) -> String {
         format!("expected {:?} to be less than {:?}", lhs, self.0)
     }
+
+    fn negated_fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected {:?} to be greater than or equal to {:?}", lhs, self.0)
+    }
 }
 
 pub struct GreaterThan<Lhs: Debug>(pub Lhs);
@@ -23,6 +27,10 @@ impl<Lhs: Debug + PartialOrd> Matcher<Lhs> for GreaterThan<Lhs> {
     fn fail_msg(&self, lhs: &Lhs) -> String {
         format!("expected {:?} to be greater than {:?}", lhs, self.0)
     }
+
+    fn negated_fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected {:?} to be less than or equal to {:?}", lhs, self.0)
+    }
 }
 
 pub struct Equal<Lhs: Debug>(pub Lhs);
@@ -34,6 +42,10 @@ impl<Lhs: Debug + PartialEq> Matcher<Lhs> for Equal<Lhs> {
 
     fn fail_msg(&self, rhs: &Lhs) -> String {
         format!("expected {:?} to equal {:?}", rhs, self.0)
+    }
+
+    fn negated_fail_msg(&self, lhs: &Lhs) -> String {
+        format!("expected {:?} to not be equal to {:?}", lhs, self.0)
     }
 }
 
