@@ -38,28 +38,42 @@ mod test {
     use super::super::super::dsl::*;
 
     #[test]
-    fn test_none() {
+    fn test_none_matches() {
         let n: Option<String> = None;
         expect(n).is(none());
     }
 
     #[test]
     #[should_panic(expected="expected Some(\"Hello\") to be None")]
-    fn test_not_none_to_fail() {
+    fn test_none_fails_with_message() {
         let n = Some("Hello");
         expect(n).is(none());
     }
 
     #[test]
-    fn test_some() {
+    #[should_panic(expected="expected None to be Some<i32>")]
+    fn test_negated_none_fails_with_message() {
+        let n: Option<i32> = None;
+        expect(n).is_not(none());
+    }
+
+    #[test]
+    fn test_some_matches() {
         let n = Some(32);
         expect(n).is(some());
     }
 
     #[test]
     #[should_panic(expected="expected None to be Some<i32>")]
-    fn test_not_some_to_fail() {
+    fn test_some_fails_with_message() {
         let n: Option<i32> = None;
         expect(n).is(some());
+    }
+
+    #[test]
+    #[should_panic(expected="expected Some(32) to be None")]
+    fn test_negated_some_fails_with_message() {
+        let n = Some(32);
+        expect(n).is_not(some());
     }
 }
