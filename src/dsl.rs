@@ -34,3 +34,11 @@ pub fn none() -> Box<Nothing> {
 pub fn some() -> Box<Something> {
     Box::new(Something)
 }
+
+pub fn be_true() -> Box<BeTrue> {
+    Box::new(BeTrue)
+}
+
+pub fn be_false() -> Box<BeFalse> {
+    Box::new(BeFalse)
+}
