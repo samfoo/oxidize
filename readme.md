@@ -23,7 +23,7 @@ Any expectation can also be negated:
 ## Built-in Matchers
 
 Oxidize has of built-in
-[matchers](http://samfoo.github.io/oxidize/matchers/index.html) that you can
+[matchers](http://samfoo.github.io/oxidize/oxidize/matchers/index.html) that you can
 use for all kinds of data.
 
 ### Equality
