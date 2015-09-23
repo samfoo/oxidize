@@ -36,39 +36,67 @@ impl<Lhs: Debug + Collection> Matcher<Lhs> for Empty {
 
 #[cfg(test)]
 mod test {
-    use super::super::super::dsl::*;
+    mod vec {
+        use super::super::super::super::dsl::*;
 
-    #[test]
-    fn test_empty() {
-        let v: Vec<usize> = Vec::new();
-        expect(v).is(empty());
+        #[test]
+        fn test_empty_vec_matches() {
+            let v: Vec<usize> = Vec::new();
+            expect(v).is(empty());
+        }
+
+        #[test]
+        #[should_panic(expected="expected [1, 2, 3] to be empty")]
+        fn test_empty_vec_fails_with_message() {
+            expect(vec![1, 2, 3]).is(empty());
+        }
+
+        #[test]
+        #[should_panic(expected="expected [] not to be empty")]
+        fn test_negated_empty_vec_fails_with_message() {
+            expect(Vec::<String>::new()).is_not(empty());
+        }
     }
 
-    #[test]
-    #[should_panic(expected="expected [1, 2, 3] to be empty")]
-    fn test_not_empty_vec_fails() {
-        expect(vec![1, 2, 3]).is(empty());
+    mod string {
+        use super::super::super::super::dsl::*;
+
+        #[test]
+        fn test_empty_string_matches() {
+            expect("".to_string()).is(empty());
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"not-empty\" to be empty")]
+        fn test_empty_string_fails_with_message() {
+            expect("not-empty".to_string()).is(empty());
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"\" not to be empty")]
+        fn test_negated_empty_string_fails_with_message() {
+            expect("".to_string()).is_not(empty());
+        }
     }
 
-    #[test]
-    fn test_empty_string() {
-        expect("".to_string()).is(empty());
-    }
+    mod str {
+        use super::super::super::super::dsl::*;
 
-    #[test]
-    #[should_panic(expected="expected \"not-empty\" to be empty")]
-    fn test_not_empty_string() {
-        expect("not-empty".to_string()).is(empty());
-    }
+        #[test]
+        fn test_empty_str_matches() {
+            expect("").is(empty());
+        }
 
-    #[test]
-    fn test_empty_str() {
-        expect("").is(empty());
-    }
+        #[test]
+        #[should_panic(expected="expected \"hey diddle diddle\" to be empty")]
+        fn test_empty_str_fails_with_message() {
+            expect("hey diddle diddle").is(empty())
+        }
 
-    #[test]
-    #[should_panic(expected="expected \"hey diddle diddle\" to be empty")]
-    fn test_not_empty_str_fails() {
-        expect("hey diddle diddle").is(empty())
+        #[test]
+        #[should_panic(expected="expected \"\" not to be empty")]
+        fn test_negated_empty_str_fails_with_message() {
+            expect("").is_not(empty())
+        }
     }
 }
