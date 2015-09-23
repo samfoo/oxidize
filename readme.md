@@ -1,4 +1,4 @@
-![travis ci](https://travis-ci.org/samfoo/oxidize.svg)
+![https://travis-ci.org/samfoo/oxidize](https://travis-ci.org/samfoo/oxidize.svg)
 
 # What is oxidize?
 
