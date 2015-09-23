@@ -92,72 +92,130 @@ impl<'a, 'b> Matcher<&'a str> for Contains<&'b str> {
 
 #[cfg(test)]
 mod test {
-    use super::super::super::dsl::*;
+    mod vec_t_contains_t {
+        use super::super::super::super::dsl::*;
 
-    #[test]
-    fn test_contains() {
-        expect(vec![1, 2, 3]).to(contain(1));
+        #[test]
+        fn test_contains_with_vector_matches() {
+            expect(vec![1, 2, 3]).to(contain(1));
+        }
+
+        #[test]
+        #[should_panic(expected="expected [1, 2, 3] to contain 5")]
+        fn test_contains_with_vector_fails_with_message() {
+            expect(vec![1, 2, 3]).to(contain(5));
+        }
+
+        #[test]
+        #[should_panic(expected="expected [1, 2, 3] not to contain 2")]
+        fn test_negated_contains_with_vector_fails_with_message() {
+            expect(vec![1, 2, 3]).to_not(contain(2));
+        }
     }
 
-    #[test]
-    #[should_panic(expected="expected [1, 2, 3] to contain 5")]
-    fn test_not_contains_fails() {
-        expect(vec![1, 2, 3]).to(contain(5));
+    mod str_contains_char {
+        use super::super::super::super::dsl::*;
+
+        #[test]
+        fn test_contains_char_in_str_matches() {
+            expect("Hello, world!".to_string()).to(contain('H'));
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"fe fi fo fum\" to contain 'z'")]
+        fn test_contains_char_in_str_fails_with_message() {
+            expect("fe fi fo fum".to_string()).to(contain('z'));
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"fe fi fo fum\" not to contain 'f'")]
+        fn test_negated_contains_char_in_str_fails_with_message() {
+            expect("fe fi fo fum".to_string()).to_not(contain('f'));
+        }
     }
 
-    #[test]
-    fn test_contains_string_char() {
-        expect("Hello, world!".to_string()).to(contain('H'));
+    mod str_contains_str {
+        use super::super::super::super::dsl::*;
+
+        #[test]
+        fn test_contains_substring_in_str_matches() {
+            expect("Hello, world!").to(contain("Hello"));
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
+        fn test_contains_substring_in_str_fails_with_message() {
+            expect("Hello, world!").to(contain("not-in-there"));
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"Hello, world!\" not to contain \"Hello\"")]
+        fn test_negated_contains_substring_in_str_fails_with_message() {
+            expect("Hello, world!").to_not(contain("Hello"));
+        }
     }
 
-    #[test]
-    #[should_panic(expected="expected \"fe fi fo fum\" to contain 'z'")]
-    fn test_not_contains_char_fails() {
-        expect("fe fi fo fum".to_string()).to(contain('z'));
+    mod string_contains_str {
+        use super::super::super::super::dsl::*;
+
+        #[test]
+        fn test_contains_substring_in_string_matches() {
+            expect("Hello, world!".to_string()).to(contain("Hello"));
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
+        fn test_contains_substring_in_string_fails_with_message() {
+            expect("Hello, world!".to_string()).to(contain("not-in-there"));
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"Hello, world!\" not to contain \"Hello\"")]
+        fn test_negated_contains_substring_in_string_fails_with_message() {
+            expect("Hello, world!".to_string()).to_not(contain("Hello"));
+        }
     }
 
-    #[test]
-    fn test_contains_str_substring() {
-        expect("Hello, world!").to(contain("Hello"));
+    mod str_contains_string {
+        use super::super::super::super::dsl::*;
+
+        #[test]
+        fn test_contains_string_substring_in_str_matches() {
+            expect("Hello, world!").to(contain("Hello".to_string()));
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
+        fn test_contains_string_substring_in_str_fails_with_message() {
+            expect("Hello, world!").to(contain("not-in-there".to_string()));
+        }
+
+        #[test]
+        #[should_panic(expected="expected \"Hello, world!\" not to contain \"Hello\"")]
+        fn test_negated_contains_string_substring_in_str_fails_with_message() {
+            expect("Hello, world!").to_not(contain("Hello".to_string()));
+        }
     }
 
-    #[test]
-    #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
-    fn test_not_contains_str_substring() {
-        expect("Hello, world!").to(contain("not-in-there"));
-    }
+    mod string_contains_string {
+        use super::super::super::super::dsl::*;
 
-    #[test]
-    fn test_contains_string_str_substring() {
-        expect("Hello, world!".to_string()).to(contain("Hello"));
-    }
+        #[test]
+        fn test_contains_string_substring_in_string_matches() {
+            expect("Hello, world!".to_string()).to(contain("Hello".to_string()));
+        }
 
-    #[test]
-    #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
-    fn test_not_contains_string_str_substring() {
-        expect("Hello, world!".to_string()).to(contain("not-in-there"));
-    }
+        #[test]
+        #[should_panic(expected="expected \"fe fi fo fum\" to contain \"substring\"")]
+        fn test_contains_string_substring_in_string_fails_with_message() {
+            expect("fe fi fo fum".to_string()).to(contain("substring".to_string()));
+        }
 
-    #[test]
-    fn test_contains_str_string_substring() {
-        expect("Hello, world!").to(contain("Hello".to_string()));
-    }
-
-    #[test]
-    #[should_panic(expected="expected \"Hello, world!\" to contain \"not-in-there\"")]
-    fn test_not_contains_str_string_substring() {
-        expect("Hello, world!").to(contain("not-in-there".to_string()));
-    }
-
-    #[test]
-    fn test_contains_string_substring() {
-        expect("Hello, world!".to_string()).to(contain("Hello".to_string()));
-    }
-
-    #[test]
-    #[should_panic(expected="expected \"fe fi fo fum\" to contain \"substring\"")]
-    fn test_not_contains_substring_fails() {
-        expect("fe fi fo fum".to_string()).to(contain("substring".to_string()));
+        #[test]
+        #[should_panic(expected="expected \"fe fi fo fum\" not to contain \"fum\"")]
+        fn test_negated_contains_string_substring_in_string_fails_with_message() {
+            expect("fe fi fo fum".to_string()).to_not(contain("fum".to_string()));
+        }
     }
 }
 
