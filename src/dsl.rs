@@ -1,8 +1,8 @@
 use std::fmt::Debug;
-
 use super::Expectation;
 use super::matchers::*;
 
+/// Create an expectation with a value that can then be matched against.
 pub fn expect<T: Debug>(lhs: T) -> Expectation<T> {
     Expectation(lhs)
 }
