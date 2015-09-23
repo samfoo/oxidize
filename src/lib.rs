@@ -10,21 +10,15 @@
 //!
 //! For example:
 //!
-//! ```rust
-//! #[test]
-//! fn test_optimus_should_be_prime() {
+//!     use oxidize::dsl::*;
+//!
 //!     expect("optimus prime").to(contain("prime"));
-//! }
-//! ```
 //!
 //! Any expectation can also be negated:
 //!
-//! ```rust
-//! #[test]
-//! fn test_optimus_should_be_prime() {
+//!     use oxidize::dsl::*;
+//!
 //!     expect("megatron").to_not(contain("prime"));
-//! }
-//! ```
 //!
 //! ## Built-in Matchers
 //!
@@ -82,7 +76,7 @@
 //!
 //! ## Inspiration
 //!
-//! The following were inspirational in oxidize's design (maybe they'll inspire
+//! These projects were inspirational in oxidize's design (maybe they'll inspire
 //! you, too!):
 //!
 //! * [rspec-expectations](https://github.com/rspec/rspec-expectations/)
