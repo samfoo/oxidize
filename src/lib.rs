@@ -1,10 +1,9 @@
 #![feature(core_intrinsics)]
 
 use matchers::Matcher;
-use dsl::*;
 
-mod matchers;
-mod dsl;
+pub mod matchers;
+pub mod dsl;
 
 use std::fmt::Debug;
 
