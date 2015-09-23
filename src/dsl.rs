@@ -27,14 +27,6 @@ pub fn less_than<T: Debug>(rhs: T) -> Box<LessThan<T>> {
     Box::new(LessThan(rhs))
 }
 
-pub fn any_of<T: Debug>(rhs: Vec<Box<Matcher<T>>>) -> Box<AnyOf<T>> {
-    Box::new(AnyOf(rhs))
-}
-
-pub fn all_of<T: Debug>(rhs: Vec<Box<Matcher<T>>>) -> Box<AllOf<T>> {
-    Box::new(AllOf(rhs))
-}
-
 pub fn none() -> Box<Nothing> {
     Box::new(Nothing)
 }
