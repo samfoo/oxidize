@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Empty",""]],"trait":[["Collection",""]]});
