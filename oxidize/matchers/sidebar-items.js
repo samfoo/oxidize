@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["contains",""],["equality",""],["length",""],["option",""],["truthiness",""]],"trait":[["Matcher",""]]});
+initSidebarItems({"mod":[["contains",""],["equality",""],["length",""],["option",""],["regex",""],["truthiness",""]],"trait":[["Matcher",""]]});

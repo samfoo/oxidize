@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-1852' class='srclink' href='../../src/oxidize/matchers/mod.rs.html#13-17' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-2138' class='srclink' href='../../src/oxidize/matchers/mod.rs.html#15-19' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait Matcher&lt;Lhs&gt; {
     fn <a href='#tymethod.matches' class='fnname'>matches</a>(&amp;self, lhs: &amp;Lhs) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>;
     fn <a href='#tymethod.fail_msg' class='fnname'>fail_msg</a>(&amp;self, lhs: &amp;Lhs) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>;
@@ -70,6 +70,8 @@
 <li><code>impl&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a>&gt; <a class='trait' href='../../oxidize/matchers/trait.Matcher.html' title='oxidize::matchers::Matcher'>Matcher</a>&lt;<a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;T&gt;&gt; for <a class='struct' href='../../oxidize/matchers/option/struct.Something.html' title='oxidize::matchers::option::Something'>Something</a></code></li>
 <li><code>impl <a class='trait' href='../../oxidize/matchers/trait.Matcher.html' title='oxidize::matchers::Matcher'>Matcher</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>&gt; for <a class='struct' href='../../oxidize/matchers/truthiness/struct.BeTrue.html' title='oxidize::matchers::truthiness::BeTrue'>BeTrue</a></code></li>
 <li><code>impl <a class='trait' href='../../oxidize/matchers/trait.Matcher.html' title='oxidize::matchers::Matcher'>Matcher</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>&gt; for <a class='struct' href='../../oxidize/matchers/truthiness/struct.BeFalse.html' title='oxidize::matchers::truthiness::BeFalse'>BeFalse</a></code></li>
+<li><code>impl&lt;'a&gt; <a class='trait' href='../../oxidize/matchers/trait.Matcher.html' title='oxidize::matchers::Matcher'>Matcher</a>&lt;&amp;'a <a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt; for <a class='struct' href='../../oxidize/matchers/regex/struct.MatchesRegex.html' title='oxidize::matchers::regex::MatchesRegex'>MatchesRegex</a>&lt;'a&gt;</code></li>
+<li><code>impl&lt;'a&gt; <a class='trait' href='../../oxidize/matchers/trait.Matcher.html' title='oxidize::matchers::Matcher'>Matcher</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt; for <a class='struct' href='../../oxidize/matchers/regex/struct.MatchesRegex.html' title='oxidize::matchers::regex::MatchesRegex'>MatchesRegex</a>&lt;'a&gt;</code></li>
 </ul><script type="text/javascript" async
                               src="../../implementors/oxidize/matchers/trait.Matcher.js">
                       </script></section>
