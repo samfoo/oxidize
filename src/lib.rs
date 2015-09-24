@@ -74,6 +74,12 @@
 //!     expect(big.pop()).is(some());
 //!     expect(big.pop()).is(none());
 //!
+//! ### Regex
+//!
+//!     use oxidize::dsl::*;
+//!
+//!     expect("sam").to(match_regex("..."));
+//!
 //! ## Inspiration
 //!
 //! These projects were inspirational in oxidize's design (maybe they'll inspire
@@ -82,6 +88,8 @@
 //! * [rspec-expectations](https://github.com/rspec/rspec-expectations/)
 //! * [hamcrest](http://hamcrest.org/)
 //! * [assertj](https://joel-costigliola.github.io/assertj/)
+
+extern crate regex;
 
 use matchers::Matcher;
 

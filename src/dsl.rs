@@ -42,3 +42,7 @@ pub fn be_true() -> Box<BeTrue> {
 pub fn be_false() -> Box<BeFalse> {
     Box::new(BeFalse)
 }
+
+pub fn match_regex<'a>(rhs: &'a str) -> Box<MatchesRegex<'a>> {
+    Box::new(MatchesRegex(rhs))
+}

@@ -75,6 +75,13 @@ use for all kinds of data.
     expect(big.pop()).is(some());
     expect(big.pop()).is(none());
 
+
+### Regex
+
+    use oxidize::dsl::*;
+
+    expect("sam").to(match_regex("..."));
+
 ## Inspiration
 
 These projects were inspirational in oxidize's design (maybe they'll inspire

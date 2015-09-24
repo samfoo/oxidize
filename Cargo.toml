@@ -7,3 +7,7 @@ documentation = "http://github.com/samfoo/oxidize"
 homepage = "http://github.com/samfoo/oxidize"
 repository = "http://github.com/samfoo/oxidize"
 authors = ["Sam Gibson <sam@ifdown.net>"]
+
+[dependencies]
+regex = "0.1.41"
+
