@@ -1,5 +1,4 @@
 use std::fmt::Debug;
-use std::intrinsics::type_name;
 use super::Matcher;
 
 pub struct Nothing;
@@ -15,7 +14,7 @@ impl<T: Debug> Matcher<Option<T>> for Nothing {
     }
 
     fn negated_fail_msg(&self, lhs: &Option<T>) -> String {
-        format!("expected {:?} to be Some<{}>", lhs, unsafe { type_name::<T>() })
+        format!("expected {:?} to be Some", lhs)
     }
 }
 
@@ -25,7 +24,7 @@ impl<T: Debug> Matcher<Option<T>> for Something {
     }
 
     fn fail_msg(&self, lhs: &Option<T>) -> String {
-        format!("expected {:?} to be Some<{}>", lhs, unsafe { type_name::<T>() })
+        format!("expected {:?} to be Some", lhs)
     }
 
     fn negated_fail_msg(&self, lhs: &Option<T>) -> String {
