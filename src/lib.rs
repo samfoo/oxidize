@@ -1,4 +1,3 @@
-#![feature(core_intrinsics)]
 #![doc(html_root_url="https://samfoo.github.io/oxidize/")]
 #![cfg_attr(test, deny(warnings))]
 
